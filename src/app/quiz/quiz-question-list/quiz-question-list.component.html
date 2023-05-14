@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="quiz-questions-section" *ngIf="filtredQuestions$ | async as questions">
+    <quiz-question
+    (userAnswer)="getUserAnswer($event)"
+    *ngFor="let qst of questions"
+    [canHighlight]="submited"
+    [question]="qst"></quiz-question>
+    <button id="submitButton" type="submit" [hidden]="!hasUserAnwseredAllQuestions" (click)="onSubmit()">Submit</button>
+  </div>
+  <div class="quiz-result-section" *ngIf="hasUserAnwseredAllQuestions && submited">
+    <quiz-result [score]="finalScore"></quiz-result>
+    <quiz-resetter></quiz-resetter>
+  </div>  
+</div>

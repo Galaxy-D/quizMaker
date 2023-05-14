@@ -1,0 +1,31 @@
+
+.container .answers-section {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  gap: 20px;
+}
+
+.answerBtn {
+  border: 2px solid rgb(50, 170, 50);
+  border-radius: 4px;
+}
+
+.answerBtn:hover {
+  background-color: rgb(50, 170, 50);
+  cursor: pointer;
+}
+
+.active {
+  background-color: rgb(50, 170, 50);
+}
+
+.user-correct-response, .expected-correct-response {
+  border: 2px solid rgb(50, 170, 50);
+  background-color: rgb(50, 170, 50);;
+}
+
+.user-wrong-response {
+  border: 2px solid red !important;
+  background-color: red;
+}

@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col-3">
+      <p>{{question.question | unescape}}</p>
+      <div class="answers-section">
+        <button type="button" class="answerBtn"
+                *ngFor="let answer of possibleAnswers"
+                (click)="onSelectAnswer(answer)"
+                [class.expected-correct-response]="canHighlight && answer === question.correct_answer"
+                [class.user-correct-response]="canHighlight && selectedAnswer === question.correct_answer && selectedAnswer === answer"
+                [class.user-wrong-response]="canHighlight && selectedAnswer !== question.correct_answer && selectedAnswer === answer"
+                >{{answer | unescape}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

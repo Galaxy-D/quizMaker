@@ -1,0 +1,12 @@
+
+.container{
+  margin-left: 25%;
+}
+
+.quiz-maker-section {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  gap: 20px;
+}
+

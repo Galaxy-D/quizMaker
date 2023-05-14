@@ -1,0 +1,14 @@
+
+.container{
+  margin-left: 25%;
+}
+
+#submitButton {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 400px;
+}
+
+.quiz-result-section {
+  width: 400px;
+}

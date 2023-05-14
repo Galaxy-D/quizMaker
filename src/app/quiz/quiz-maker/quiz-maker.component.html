@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="quiz-maker-section">
+    <div id="categorySelect">
+      <select class="form-control" (change)="onSelectedCategory($event)">
+        <option value="0">Select a Category</option>
+        <option *ngFor="let category of categories$ | async"
+                [value]="category.id">{{ category.name }}</option>
+      </select>
+    </div>
+    <div id="difficultySelect">
+      <select class="form-control" (change)="onSelectedDifficulty($event)">
+        <option>Select difficulty</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
+    <button type="button" id="createBtn" (click)="onCreateQuiz()">Create</button>
+  </div>
+</div>
