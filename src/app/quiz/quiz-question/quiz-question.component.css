@@ -16,16 +16,18 @@
   cursor: pointer;
 }
 
-.active {
+.lockQuiz{
+  pointer-events: none;
+}
+
+.userSelectedAnswer,
+.userCorrectAnswer,
+.expectedCorrectAnswer {
+  border: 2px solid rgb(50, 170, 50);
   background-color: rgb(50, 170, 50);
 }
 
-.user-correct-response, .expected-correct-response {
-  border: 2px solid rgb(50, 170, 50);
-  background-color: rgb(50, 170, 50);;
-}
-
-.user-wrong-response {
+.userWrongAnswer {
   border: 2px solid red !important;
   background-color: red;
 }

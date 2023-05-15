@@ -9,7 +9,7 @@ import { IQuestion, ResponseStatus } from 'src/app/shared/index';
 export class QuizQuestionComponent implements OnInit {
 
   @Input() question: IQuestion;
-  @Input() canHighlight: boolean = false;
+  @Input() isQuizSubmitted: boolean = false;
   @Output() userAnswer = new EventEmitter<[string, ResponseStatus]>();
 
   possibleAnswers: string[] = [];

@@ -5,10 +5,11 @@
       <div class="answers-section">
         <button type="button" class="answerBtn"
                 *ngFor="let answer of possibleAnswers"
+                [ngClass]="{lockQuiz:isQuizSubmitted,userSelectedAnswer:selectedAnswer === answer}"
                 (click)="onSelectAnswer(answer)"
-                [class.expected-correct-response]="canHighlight && answer === question.correct_answer"
-                [class.user-correct-response]="canHighlight && selectedAnswer === question.correct_answer && selectedAnswer === answer"
-                [class.user-wrong-response]="canHighlight && selectedAnswer !== question.correct_answer && selectedAnswer === answer"
+                [class.expectedCorrectAnswer]="isQuizSubmitted && answer === question.correct_answer"
+                [class.userCorrectAnswer]="isQuizSubmitted && selectedAnswer === question.correct_answer && selectedAnswer === answer"
+                [class.userWrongAnswer]="isQuizSubmitted && selectedAnswer !== question.correct_answer && selectedAnswer === answer"
                 >{{answer | unescape}}</button>
       </div>
     </div>
