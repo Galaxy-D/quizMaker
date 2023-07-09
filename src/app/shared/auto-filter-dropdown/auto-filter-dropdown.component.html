@@ -1,0 +1,18 @@
+<div class="search-container"
+     (mouseenter)="displayAllChoice()"
+     (mouseleave)="hideAllChoice()">
+
+	<input placeholder="Make a choice"
+         id="userSelectedChoice"
+         name="userChoice"
+         type="search"
+         [(ngModel)]="userChoice"
+         (ngModelChange)="onSelectedItem($event)"
+         (keyup)="handelFilteredData()"
+         (blur)="handelUserInput()"
+         #userChoiceRef>
+
+	<div class="dataList" #dataListRef (click)="getSelectedChoice($event)">
+		<ul></ul>
+	</div>
+</div>

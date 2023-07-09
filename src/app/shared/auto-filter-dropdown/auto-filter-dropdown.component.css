@@ -1,0 +1,38 @@
+
+ul {
+  display: none;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+ul.has-dataList {
+  display: block;
+}
+
+ul.has-dataList li {
+  cursor: pointer;
+}
+
+ul.has-dataList li:hover {
+  background-color: #b9b6b4;
+}
+
+/*
+:host ::ng-deep li {
+  cursor: pointer;
+}
+
+:host ::ng-deep li:hover {
+  background-color: #b9b6b4;
+} */
+
+
+
+
+
+
+
