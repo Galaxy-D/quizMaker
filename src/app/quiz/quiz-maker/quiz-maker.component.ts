@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { QuizService } from '../quiz.service';
+import { ICategory } from 'src/app/shared/models';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'quiz-maker',
@@ -9,19 +11,57 @@ import { QuizService } from '../quiz.service';
 })
 export class QuizMakerComponent implements OnInit {
 
+  userChoice: string;
   selectedCategoryId: number = 0 ;
   selectedDifficulty: string = '';
+  hasSubCategories: boolean = false;
+
+  subCategory: ICategory[];
+  mainCategories: ICategory[];
+  originalCategories: ICategory[];
+  categoryWithSubCategories: ICategory[] = [
+    {id:undefined,name:'Entertainment'},
+    {id:undefined,name:'Science'}
+  ];
+
+  subs : Subscription;
 
   constructor(private QuizService: QuizService, private router: Router) { }
 
-  categories$ = this.QuizService.triviaCategories$;
-
   ngOnInit(): void {
+
+    this.subs = this.QuizService.triviaCategories$.subscribe(data => {
+
+      this.originalCategories = data;
+
+      //this return only main categories
+      this.mainCategories = this.originalCategories.filter(cat =>
+        this.categoryWithSubCategories.every(subCat => {
+          let regex = new RegExp(`^${subCat.name}:`);
+          return !(cat.name.includes(subCat.name) && regex.test(cat.name))
+        })
+      ).concat(this.categoryWithSubCategories);
+
+    });
+
   }
 
-  onSelectedCategory(event: Event): void {
-    const el = event.target as HTMLSelectElement;
-    this.selectedCategoryId = +el.value;
+  onSelectedCategory(category: ICategory): void {
+
+    let catWithSubCat: boolean = this.categoryWithSubCategories.some(cat => cat.name == category.name);
+
+    if (catWithSubCat) {
+      //get all sub categories for this main category
+      this.hasSubCategories = true;
+      this.subCategory = this.filterBySubCategory(category.name);
+    } else {
+      this.hasSubCategories = false;
+      this.selectedCategoryId = category.id;
+    }
+  }
+
+  onSelectedSubCategory(subCategory: ICategory): void {
+    this.selectedCategoryId = subCategory.id;
   }
 
   onSelectedDifficulty(event: Event): void {
@@ -32,5 +72,22 @@ export class QuizMakerComponent implements OnInit {
   onCreateQuiz(): void {
     this.QuizService.userSelectedCategoryAndDifficulty(this.selectedCategoryId, this.selectedDifficulty);
     this.router.navigate(['/quizquestionlist']);
+  }
+
+  filterBySubCategory(filter: string): ICategory[]{
+
+    let regex = new RegExp(`^${filter}:`);
+
+    //this return only categories which have any sub-category
+    return this.originalCategories.filter(mainCategories => mainCategories.name.includes(filter) && regex.test(mainCategories.name))
+      .map(cat => ({
+          ...cat,
+          name: cat.name.slice(cat.name.indexOf(':')+2)
+        })
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 }
