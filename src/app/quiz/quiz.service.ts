@@ -33,7 +33,6 @@ export class QuizService {
       this.selectedCategoryAction$,
       this.selectedDifficultyAction$
     ]).pipe(
-        tap((data) => console.log('filtredTriviaQuestions$ data', data)),
         concatMap(([selectedCategoryId, selectedDifficulty]) => {
             return this.getTriviaQuestions(5,selectedCategoryId,selectedDifficulty);
         }),
@@ -44,7 +43,6 @@ export class QuizService {
       this.selectedCategoryAction$,
       this.selectedDifficultyAction$
     ]).pipe(
-        tap((data) => console.log('updateTriviaQuestions data', data)),
         concatMap(([selectedCategoryId, selectedDifficulty]) => {
             return this.getTriviaQuestions(1,selectedCategoryId,selectedDifficulty);
         }),
@@ -59,7 +57,6 @@ export class QuizService {
   getTriviaQuestions(questionAmont: number, CategoryId:number, difficulty:string): Observable<IQuestion[]>{
     return this.http.get<TriviaResponse>(`${this.triviaQuestionsUrl}?amount=${questionAmont}&category=${CategoryId}&difficulty=${difficulty}&type=multiple`)
     .pipe(
-      tap((data) => console.log('getTriviaQuestions - data ', data)),
       map(response => response.results));
   }
 
