@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError, Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { tap, catchError, shareReplay, map, concatMap } from 'rxjs/operators';
-import { IQuestion, TriviaCategory, TriviaResponse } from '../shared/index';
+import { IQuestion, TriviaCategory, TriviaResponse } from '../shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,11 @@ export class QuizService {
   private triviaCategoriesUrl = 'https://opentdb.com/api_category.php';
   private triviaQuestionsUrl = 'https://opentdb.com/api.php';
 
-  private categorySelectedSubject = new BehaviorSubject<number>(0);
-  categorySelectedAction$ = this.categorySelectedSubject.asObservable();
+  private selectedCategorySubject = new BehaviorSubject<number>(0);
+  selectedCategoryAction$ = this.selectedCategorySubject.asObservable();
 
-  private difficultySelectedSubject = new BehaviorSubject<string>('');
-  difficultySelectedAction$ = this.difficultySelectedSubject.asObservable();
+  private selectedDifficultySubject = new BehaviorSubject<string>('');
+  selectedDifficultyAction$ = this.selectedDifficultySubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -29,21 +29,38 @@ export class QuizService {
       catchError(this.handleError)
     );
 
-  filtredTriviaQuestions$ = combineLatest([
-    this.categorySelectedAction$,
-    this.difficultySelectedAction$
-  ]).pipe(
-      tap((data) => console.log('Actions Data Stream ', data)),
-      concatMap(([selectedCategoryId, selectedCategoryType]): Observable<IQuestion[]> => {
-          return this.http.get<TriviaResponse>(`${this.triviaQuestionsUrl}?amount=5&category=${selectedCategoryId}&difficulty=${selectedCategoryType}&type=multiple`)
-          .pipe(map(response => response.results));
-      }),
-      catchError(this.handleError)
-    );
+    filtredTriviaQuestions$ = combineLatest([
+      this.selectedCategoryAction$,
+      this.selectedDifficultyAction$
+    ]).pipe(
+        tap((data) => console.log('filtredTriviaQuestions$ data', data)),
+        concatMap(([selectedCategoryId, selectedDifficulty]) => {
+            return this.getTriviaQuestions(5,selectedCategoryId,selectedDifficulty);
+        }),
+        catchError(this.handleError)
+      );
+
+    updateTriviaQuestions$ = combineLatest([
+      this.selectedCategoryAction$,
+      this.selectedDifficultyAction$
+    ]).pipe(
+        tap((data) => console.log('updateTriviaQuestions data', data)),
+        concatMap(([selectedCategoryId, selectedDifficulty]) => {
+            return this.getTriviaQuestions(1,selectedCategoryId,selectedDifficulty);
+        }),
+        catchError(this.handleError)
+      );
 
   userSelectedCategoryAndDifficulty(categoryId: number, difficultyType: string): void {
-    this.categorySelectedSubject.next(categoryId);
-    this.difficultySelectedSubject.next(difficultyType);
+    this.selectedCategorySubject.next(categoryId);
+    this.selectedDifficultySubject.next(difficultyType);
+  }
+
+  getTriviaQuestions(questionAmont: number, CategoryId:number, difficulty:string): Observable<IQuestion[]>{
+    return this.http.get<TriviaResponse>(`${this.triviaQuestionsUrl}?amount=${questionAmont}&category=${CategoryId}&difficulty=${difficulty}&type=multiple`)
+    .pipe(
+      tap((data) => console.log('getTriviaQuestions - data ', data)),
+      map(response => response.results));
   }
 
   private handleError(err: HttpErrorResponse): Observable<never> {
