@@ -1,11 +1,16 @@
 <div class="container">
-  <div class="quiz-questions-section" *ngIf="filtredQuestions$ | async as questions">
+  <div class="quiz-questions-section" *ngIf="filtredQuestions">
+
     <quiz-question
+    *ngFor="let qst of filtredQuestions; trackBy:questionTrackBy"
     (userAnswer)="getUserAnswer($event)"
-    *ngFor="let qst of questions"
+    (questionChanged)="handleChangedQuestion($event)"
+    [hasUserChangedQuestion] ="hasUserChangedAnyQuestions"
     [isQuizSubmitted]="submited"
     [question]="qst"></quiz-question>
+
     <button id="submitButton" type="submit" [hidden]="!hasUserAnwseredAllQuestions || submited" (click)="onSubmit()">Submit</button>
+
   </div>
   <div class="quiz-result-section" *ngIf="hasUserAnwseredAllQuestions && submited">
     <quiz-result [score]="finalScore"></quiz-result>

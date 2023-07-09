@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { IQuestion, ResponseStatus } from 'src/app/shared/index';
+import { IQuestion, ResponseStatus } from 'src/app/shared/models';
 
 @Component({
   selector: 'quiz-question',
@@ -8,13 +8,16 @@ import { IQuestion, ResponseStatus } from 'src/app/shared/index';
 })
 export class QuizQuestionComponent implements OnInit {
 
+  selectedAnswer: string = '';
+  possibleAnswers: string[] = [];
+  isQuestionAnswered: boolean = false;
+
   @Input() question: IQuestion;
   @Input() isQuizSubmitted: boolean = false;
-  @Output() userAnswer = new EventEmitter<[string, ResponseStatus]>();
+  @Input() hasUserChangedQuestion: boolean = false;
 
-  possibleAnswers: string[] = [];
-  selectedAnswer: string = '';
-  isQuestionAnswered: boolean = false;
+  @Output() questionChanged = new EventEmitter<string>();
+  @Output() userAnswer = new EventEmitter<[string, ResponseStatus]>();
 
   constructor() { }
 
@@ -33,6 +36,11 @@ export class QuizQuestionComponent implements OnInit {
   onSelectAnswer(answer: string): void {
     this.selectedAnswer = answer;
     this.userAnswer.emit([this.question.question, this.isUserAnswerCorrect() ? ResponseStatus.correct : ResponseStatus.wrong]);
+  }
+
+  onUserChangedQuestion():void{
+    this.hasUserChangedQuestion = true;
+    this.questionChanged.emit(this.question.question);
   }
 
 }

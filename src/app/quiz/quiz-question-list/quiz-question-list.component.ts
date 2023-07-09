@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IAnswer, ResponseStatus } from '../../shared/index';
+import { IQuestion, ResponseStatus } from '../../shared/models';
 import { QuizService } from '../quiz.service';
-import { map, tap } from 'rxjs/operators';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'quiz-question-list',
@@ -10,21 +10,21 @@ import { map, tap } from 'rxjs/operators';
 })
 export class QuizQuestionListComponent implements OnInit {
 
-  // userResponses = <IAnswer>{};
-  userResponses: Record<string,ResponseStatus> = {}
   finalScore: number = 0;
   submited: boolean = false;
+  hasUserChangedAnyQuestions: boolean = false;
   hasUserAnwseredAllQuestions: boolean = false;
+
+  subs: Subscription[] = [];
+  filtredQuestions:IQuestion[];
+  userResponses: Record<string,ResponseStatus> = {}
 
   constructor(private QuizService: QuizService) { }
 
-  filtredQuestions$ = this.QuizService.filtredTriviaQuestions$
-  .pipe(
-    tap((data) => console.log('filtred Questions :', data)),
-    map((data) => data),
-    );
-
   ngOnInit(): void {
+    this.subs.push(
+      this.QuizService.filtredTriviaQuestions$.subscribe(result => this.filtredQuestions = result)
+    );
   }
 
   getUserAnswer([question,answerStatus]: [string, number]): void {
@@ -39,6 +39,23 @@ export class QuizQuestionListComponent implements OnInit {
   onSubmit(): void {
     this.submited = true;
     this.getFinalScore();
+  }
+
+  handleChangedQuestion(oldQst:string){
+    this.hasUserChangedAnyQuestions = true;
+    this.subs.push(
+      this.QuizService.updateTriviaQuestions$.subscribe(newQuestion => {
+        this.filtredQuestions = this.filtredQuestions.map(el => el.question === oldQst ? newQuestion[0] : el);
+      })
+    );
+  }
+
+  questionTrackBy(index: number, item: IQuestion): string {
+    return item.question;
+  }
+
+  ngOnDestroy(): void {
+    this.subs.map(s => s.unsubscribe());
   }
 
 }

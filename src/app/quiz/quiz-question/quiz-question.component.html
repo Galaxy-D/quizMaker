@@ -11,6 +11,8 @@
                 [class.userCorrectAnswer]="isQuizSubmitted && selectedAnswer === question.correct_answer && selectedAnswer === answer"
                 [class.userWrongAnswer]="isQuizSubmitted && selectedAnswer !== question.correct_answer && selectedAnswer === answer"
                 >{{answer | unescape}}</button>
+
+        <button *ngIf="!hasUserChangedQuestion" (click)="onUserChangedQuestion()">Change question</button>
       </div>
     </div>
   </div>
