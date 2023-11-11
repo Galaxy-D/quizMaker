@@ -1,12 +1,27 @@
 
-.container{
-  margin-left: 25%;
-}
-
 .quiz-maker-section {
   display: flex;
   flex-direction: row;
   align-content: space-between;
   gap: 20px;
+}
+
+.container  {
+  padding: 20px;
+  height: 22px;
+  width: fit-content;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+h1 {
+  font-size: 70px;
+  font-weight: 600;
+  color: #fdfdfe;
+  margin-bottom: 50px;
+  text-shadow:  0px 0px 5px #b393d3
+              , 0px 0px 10px #b393d3
+              , 0px 0px 10px #b393d3
+              , 0px 0px 20px #b393d3;
 }
 

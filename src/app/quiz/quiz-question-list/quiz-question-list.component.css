@@ -1,8 +1,4 @@
 
-.container{
-  margin-left: 25%;
-}
-
 #submitButton {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -11,4 +7,12 @@
 
 .quiz-result-section {
   width: 400px;
+}
+
+.quiz-questions-section {
+  padding: 20px;
+  height: fit-content;
+  width: fit-content;
+  border: 2px solid black;
+  border-radius: 10px;
 }

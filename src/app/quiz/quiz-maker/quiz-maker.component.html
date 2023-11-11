@@ -1,5 +1,11 @@
+<h1>Quiz Maker App</h1>
+
 <div class="container">
   <div class="quiz-maker-section">
+
+    <div id="demoVideo">
+      <button type="button" (click)="openDialog()" > Play Demo Video </button>
+    </div>
 
     <div id="categorySelect">
       <auto-filter-dropdown [dataCollection]="mainCategories" (userSelectedChoice)="onSelectedCategory($event)">

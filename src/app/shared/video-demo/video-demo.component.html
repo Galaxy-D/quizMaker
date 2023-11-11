@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Quiz Maker Demo Video</h1>
+<div mat-dialog-content>
+    <iframe style="border: none;" [src]="getURL()"
+      width="800" height="450"
+      loading="lazy" frameborder="0" allowfullscreen>
+    </iframe>
+</div>
+<div mat-dialog-actions align="center">
+    <button mat-button mat-dialog-close (click)="closeDialog()">Close</button>
+</div>

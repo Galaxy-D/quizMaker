@@ -4,6 +4,10 @@ import { QuizService } from '../quiz.service';
 import { ICategory } from 'src/app/shared/models';
 import { Subscription } from 'rxjs';
 
+import { VideoDemoComponent } from "../../shared/video-demo/video-demo.component";
+import { MatDialog } from '@angular/material/dialog';
+
+
 @Component({
   selector: 'quiz-maker',
   templateUrl: './quiz-maker.component.html',
@@ -26,7 +30,7 @@ export class QuizMakerComponent implements OnInit {
 
   subs : Subscription;
 
-  constructor(private QuizService: QuizService, private router: Router) { }
+  constructor(private QuizService: QuizService, private router: Router, public dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -85,6 +89,16 @@ export class QuizMakerComponent implements OnInit {
           name: cat.name.slice(cat.name.indexOf(':')+2)
         })
       );
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(VideoDemoComponent, {
+      maxWidth: 'fit-content',
+      position: {
+        top: '28vh',
+        left: '28vw'
+      },
+    });
   }
 
   ngOnDestroy(): void {
